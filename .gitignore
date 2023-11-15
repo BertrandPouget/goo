@@ -2,4 +2,3 @@ gcn/venv/
 data/
 gcn/__pycache__/
 results.txt
-*.txt

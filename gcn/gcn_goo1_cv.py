@@ -32,7 +32,7 @@ flags.DEFINE_float('weight_decay', 5e-4, 'Weight for L2 loss on embedding matrix
 flags.DEFINE_integer('early_stopping', 5, 'Tolerance for early stopping (# of epochs).')
 
 # Load data
-a, e, y, train_mask, test_mask = load_data('../data')
+a, e, y, train_mask, test_mask = load_data('../data/python')
 
 # Create masks for cross-validation
 n_fold = 5

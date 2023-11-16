@@ -5,14 +5,19 @@ library(sf)
 library(igraph)
 library(Matrix)
 
-load('data/data.Rdata')
-gamma = ls()
+load('data/r/data.Rdata')
+gamma = setdiff(ls(),c('test_ids','train_ids'))
+
+load('utils.Rdata')
+Ns = compute_Ns(y)
+N = Ns[1]; N_l = Ns[2]; N_p = Ns[3]; N_u = Ns[4]
+rm(Ns)
 
 #Split
-set.seed(150)
+set.seed(110)
 
-paved_ids = sort(which(data$osm_surf == 'paved'))
-unpaved_ids = sort(which(data$osm_surf == 'unpaved'))
+paved_ids = sort(which(y[,1] == 1))
+unpaved_ids = sort(which(y[,2] == 1))
 
 paved_prop = N_p / N_l
 unpaved_prop = N_u / N_l
@@ -35,9 +40,9 @@ test_mask = rep(FALSE, N)
 test_mask[test_ids] = TRUE
 
 #Python
-write.table(train_mask, "data/train_mask.txt", sep = "\t", row.names = FALSE, col.names = FALSE)
-write.table(test_mask, "data/test_mask.txt", sep = "\t", row.names = FALSE, col.names = FALSE)
+write.table(train_mask, "data/python/train_mask.txt", sep = "\t", row.names = FALSE, col.names = FALSE)
+write.table(test_mask, "data/python/test_mask.txt", sep = "\t", row.names = FALSE, col.names = FALSE)
 
 #R
-rm(list=setdiff(ls(),c(gamma)))
-save.image("data/data.Rdata")
+rm(list=setdiff(ls(),c(gamma,'test_ids','train_ids')))
+save.image("data/r/data.Rdata")

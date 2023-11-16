@@ -5,16 +5,17 @@ library(sf)
 library(sp)
 library(ggplot2)
 
-load('data/data.RData')
+load('data/r/data.RData')
+geo = st_read('data/r/geo.shx')
 results = scan(file='results.txt',what=numeric(),sep='\t')
 
-ttt = character(dim(data)[1])
-ttt[which(results==0)]="0. paved";
-ttt[which(results==1)]="1. unpaved";
-ttt[which(results==2)]="2. uncertain";
+ttt = character(length(results))
+ttt[which(results==0)]="0. paved"
+ttt[which(results==1)]="1. unpaved"
+ttt[which(results==2)]="2. uncertain"
 
 windows();  ggplot() + 
-  geom_sf(data = data, aes(color=ttt,fill=ttt))+
+  geom_sf(data = geo, aes(color=ttt,fill=ttt))+
   scale_fill_manual(values=c("blue", "brown", "purple"))+
   scale_color_manual(values=c("blue", "brown", "purple"))+
   labs(fill= "Pavement surface")+

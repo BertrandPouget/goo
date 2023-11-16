@@ -7,11 +7,15 @@ library(igraph)
 library(Matrix)
 library(caret)
 
-load('data/data.Rdata')
-load('knn/utils.Rdata')
+load('data/r/data.Rdata')
+load('utils.Rdata')
+
+Ns = compute_Ns(y)
+N = Ns[1]; N_l = Ns[2]; N_p = Ns[3]; N_u = Ns[4]
+rm(Ns)
 
 n_fold = 5
-ids_CV = split_CV(ids = train_ids, y = data$osm_surf)
+ids_CV = split_CV(ids = train_ids, y = y)
 train_ids_CV = ids_CV$train
 val_ids_CV = ids_CV$val
 rm(ids_CV)
@@ -23,7 +27,7 @@ e = e
 p = p[1:N_l,]
 
 # HYPER_PARAMS
-kappas = c(3, 5, 7)
+kappas = c(3,5,7)
 n_kappas = length(kappas)
 
 thetas = get_thetas(start = 0, stop = 1, step = 0.2)
@@ -44,12 +48,12 @@ for (i_kappa in 1:n_kappas)
     err_val_n = vector('numeric', n_fold)
     for (n in 1:n_fold)
     {
-      f_u = compute_f_u(e,data$osm_surf,train_ids_CV[[n]],kappa)
+      f_u = compute_f_u(e,y,train_ids_CV[[n]],kappa)
       f_p = 1 - f_u
       
       lev = c(0,1,2)
       preds = ifelse(f_p <= theta_1, 1, ifelse(f_p > theta_2, 0, 2))[val_ids_CV[[n]]]
-      true = ifelse(data$osm_surf[val_ids_CV[[n]]] == 'unpaved', 1, ifelse(data$osm_surf[val_ids_CV[[n]]] == 'paved', 0, 2))
+      true = ifelse(y[val_ids_CV[[n]],2] == 1, 1, ifelse(y[val_ids_CV[[n]],1] == 1, 0, 2))
       
       cm = table(true = factor(true, levels = lev),
                  preds = factor(preds, levels = lev))
@@ -69,12 +73,12 @@ best_kappa = kappas[best_combo[1]]
 best_theta_1 = thetas[best_combo[2],1]
 best_theta_2 = thetas[best_combo[2],2]
 
-f_u = compute_f_u(e,data$osm_surf,train_ids,best_kappa)
+f_u = compute_f_u(e,y,train_ids,best_kappa)
 f_p = 1 - f_u
 
 lev = c(0,1,2)
 preds = ifelse(f_p <= best_theta_1, 1, ifelse(f_p > best_theta_2, 0, 2))[test_ids]
-true = ifelse(data$osm_surf[test_ids] == 'unpaved', 1, ifelse(data$osm_surf[test_ids] == 'paved', 0, 2))
+true = ifelse(y[test_ids,2] == 1, 1, ifelse(y[test_ids,1] == 1, 0, 2))
 
 cm = table(true = factor(true, levels = lev),
            preds = factor(preds, levels = lev))

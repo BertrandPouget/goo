@@ -1,7 +1,7 @@
 # Graphs of Objects
 
 Code implemented for the computations carried out throughout the MSc thesis in Mathematical Engineering
-"Innovating Data Modelling for Road Pavement Detection with Graphs of Objects".
+"Graphs of Objects: Innovating Data Modelling for Road Pavement Detection".
 
 For an in-depth explanation of the passages, the consultation of the original
 work is strongly advised.

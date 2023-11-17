@@ -82,7 +82,7 @@ In the `knn` folder, four different `.R` files can be found:
     pavement error over the test set using the best hyperparameters.
 
 The user can also modify the dissimilarity matrix for the GoO-Oriented
-model by simply changing a line of code. In other for the most wide
+model by simply changing a line of code. In order for the most wide
 choice to be available, `p` and `a` have been added to `data.Rdata` even
 if we did not choose to use them in our final model.
 
